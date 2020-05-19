@@ -91,48 +91,17 @@ class Basket
      * @throws BillingException
      * @throws CommunicationException
      */
-    public function checkout(BasketBuilder $builder): void
+    public function checkout(CheckoutBuilder $builder): void
     {
         //TODO     В методе checkout() класса Service\Order\Basket применить паттерн Строитель (Builder).
 
-        $basket = $builder->setBilling(new Card())
+        $checkout = $builder->setBilling(new Card())
             ->setDiscount(new NullObject())
             ->setCommunication(new Email())
             ->setSecurity(new Security($this->session))
             ->build();
 
-        (new Checkout())->runCheckout($basket);
-    }
-
-    /**
-     * Проведение всех этапов заказа
-     * @param DiscountInterface $discount
-     * @param BillingInterface $billing
-     * @param SecurityInterface $security
-     * @param CommunicationInterface $communication
-     * @return void
-     * @throws BillingException
-     * @throws CommunicationException
-     */
-    public function checkoutProcess(
-        DiscountInterface $discount,
-        BillingInterface $billing,
-        SecurityInterface $security,
-        CommunicationInterface $communication
-    ): void
-    {
-        $totalPrice = 0;
-        foreach ($this->getProductsInfo() as $product) {
-            $totalPrice += $product->getPrice();
-        }
-
-        $discount = $discount->getDiscount();
-        $totalPrice = $totalPrice - $totalPrice / 100 * $discount;
-
-        $billing->pay($totalPrice);
-
-        $user = $security->getUser();
-        $communication->process($user, 'checkout_template');
+        $checkout->runCheckout($this);
     }
 
     /**

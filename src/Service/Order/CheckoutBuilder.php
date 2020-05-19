@@ -9,7 +9,7 @@ use Service\Communication\CommunicationInterface;
 use Service\Discount\DiscountInterface;
 use Service\User\SecurityInterface;
 
-class BasketBuilder
+class CheckoutBuilder
 {
     //TODO Написать самим класс строителя (BasketBuilder)
     /**
@@ -101,7 +101,7 @@ class BasketBuilder
     }
 
     /**
-     * @return Basket
+     * @return Checkout
      */
     public function build(): Checkout {
 

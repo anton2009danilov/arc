@@ -6,13 +6,13 @@ namespace Service\Order;
 use Service\Billing\BillingInterface;
 use Service\Communication\CommunicationInterface;
 use Service\Discount\DiscountInterface;
-use Service\Order\BasketBuilder;
+use Service\Order\CheckoutBuilder;
 use Service\User\SecurityInterface;
 
 class Checkout
 {
     /**
-     * @var BasketBuilder
+     * @var CheckoutBuilder
      */
     public $builder;
 
@@ -51,16 +51,16 @@ class Checkout
 
     public function runCheckout(Basket $basket) {
         $totalPrice = 0;
-        foreach ($this->getProductsInfo() as $product) {
+        foreach ($basket->getProductsInfo() as $product) {
             $totalPrice += $product->getPrice();
         }
 
-        $discount = $basket->discount->getDiscount();
+        $discount = $this->discount->getDiscount();
         $totalPrice = $totalPrice - $totalPrice / 100 * $discount;
 
-        $basket->billing->pay($totalPrice);
+        $this->billing->pay($totalPrice);
 
-        $user = $basket->security->getUser();
+        $user = $this->security->getUser();
         $basket->communication->process($user, 'checkout_template');
     }
 }
