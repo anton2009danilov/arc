@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Service\Order;
 
@@ -91,22 +91,17 @@ class Basket
      * @throws BillingException
      * @throws CommunicationException
      */
-    public function checkout(): void
+    public function checkout(BasketBuilder $builder): void
     {
-        // Здесь должна быть некоторая логика выбора способа платежа
-        $billing = new Card();
+        //TODO     В методе checkout() класса Service\Order\Basket применить паттерн Строитель (Builder).
 
-        // Здесь должна быть некоторая логика получения информации о скидке
-        // пользователя
-        $discount = new NullObject();
+        $basket = $builder->setBilling(new Card())
+            ->setDiscount(new NullObject())
+            ->setCommunication(new Email())
+            ->setSecurity(new Security($this->session))
+            ->build();
 
-        // Здесь должна быть некоторая логика получения способа уведомления
-        // пользователя о покупке
-        $communication = new Email();
-
-        $security = new Security($this->session);
-
-        $this->checkoutProcess($discount, $billing, $security, $communication);
+        (new Checkout())->runCheckout($basket);
     }
 
     /**
@@ -124,7 +119,8 @@ class Basket
         BillingInterface $billing,
         SecurityInterface $security,
         CommunicationInterface $communication
-    ): void {
+    ): void
+    {
         $totalPrice = 0;
         foreach ($this->getProductsInfo() as $product) {
             $totalPrice += $product->getPrice();
