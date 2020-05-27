@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Service\Product;
 
@@ -34,8 +34,33 @@ class ProductService
         // $sortType === 'price'; // Сортировка по цене
         // $sortType === 'name'; // Сортировка по имени
 
+        $sortedProductList = $this->sort($productList, $sortType);
+
+        return $sortedProductList;
+    }
+
+    public function sort($productList, $sortType)
+    {
+        if ($sortType === 'name') {
+            usort($productList, function ($a, $b) {
+                return strcmp($a["name"], $b["name"]);
+            });
+        } elseif ($sortType === 'price') {
+            usort($productList, function ($a, $b) {
+                if ($a['price'] > $b['price']) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+        } else {
+            sort($productList);
+        }
+
         return $productList;
     }
+
 
     /**
      * Фабричный метод для репозитория Product
@@ -45,4 +70,5 @@ class ProductService
     {
         return new ProductRepository();
     }
+
 }
