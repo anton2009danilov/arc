@@ -47,10 +47,10 @@ class ProductController extends BaseController
      * @param Request $request
      * @return Response
      */
-    public function listAction(Request $request): Response
+    public function listAction(Request $request, $sortBy): Response
     {
         $productList = (new ProductService())->getAll(
-            $request->query->get('sort', '')
+            $request->query->get($sortBy, '')
         );
 
         return $this->render(
