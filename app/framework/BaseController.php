@@ -10,6 +10,18 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+
+//1. Найти и указать в проекте Front Controller и расписать классы, которые с ним взаимодействуют.
+//
+//BaseController.
+//
+//MainController, ProductController, OrderController, UserController extends BaseController.
+//
+//Класс Route - функция __construct принимает массив ['_controller' => [SomeController::class, 'someAction'],
+//где указывается класс используемого контроллера и метод, который контроллер должен для
+//заданной пути path.
+
+
 abstract class BaseController
 {
     /**
