@@ -11,6 +11,15 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
+
+
+//2. Найти в проекте паттерн Registry и объяснить, почему он был применён.
+//класс Registry
+// Хранит экземпляр класса ContainerBuilder, который в свою очередь тоже реализует паттерн Registry и
+// даёт доступ к реестру сервисов, параметров, алиасов, фабрик и т.д.
+//
+
+
 class Registry
 {
     /**
